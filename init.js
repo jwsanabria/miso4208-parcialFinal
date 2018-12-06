@@ -35,7 +35,7 @@ var walk = function(dir, done) {
 mongoose.connect('mongodb://'+USER_MONGO_DB+':'+PASSWORD_MONGO_DB+'@ds161146.mlab.com:61146/parcialfinal');
 var db = mongoose.connection;
 
-walk("/home/miso4208/Desktop/parcialFinal/prueba", function(err, results) {
+walk("/home/miso4208/Desktop/parcialFinal/parcial2", function(err, results) {
     if (err) throw err;
     results.forEach(folder => {
         exec("cd " +  folder 
