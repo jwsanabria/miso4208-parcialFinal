@@ -1,0 +1,24 @@
+{
+  "name": "parcialfinal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwsanabria/miso4208-parcialFinal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwsanabria/miso4208-parcialFinal/issues"
+  },
+  "homepage": "https://github.com/jwsanabria/miso4208-parcialFinal#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.3.15"
+  }
+}

@@ -1,0 +1,34 @@
+FROM tracer0tong/android-emulator
+
+RUN apt-get -y install python-software-properties &
+RUN apt-add-repository -y ppa:brightbox/ruby-ng
+RUN apt-get update
+RUN apt-get -y install  ruby2.3
+#install android dependencies
+RUN apt-get update
+RUN apt-get -y install lib32stdc++6 lib32z1 lib32z1-dev
+RUN gem install calabash-android -v 0.9.5
+ENV ANDROID_HOME /usr/local/android-sdk
+ENV GRADLE_HOME /usr/local/gradle
+ENV ANDROID_SDK_HOME $ANDROID_HOME
+ENV PATH $PATH:$ANDROID_SDK_HOME/tools
+ENV PATH $PATH:$ANDROID_SDK_HOME/platform-tools
+ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
+ENV SCREENSHOT_PATH=/usr/app/reports/
+
+RUN apt-get install netcat-openbsd
+
+RUN mkdir /usr/app
+RUN mkdir /usr/app/reports
+WORKDIR /usr/app
+
+COPY app.apk /usr/app/app.apk
+COPY /features/ /usr/app/features/
+
+RUN keytool -genkey -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+
+RUN calabash-android resign ./app.apk
+
+COPY entry.sh /usr/app/entry.sh
+RUN chmod +x /usr/app/entry.sh
+ENTRYPOINT ["/usr/app/entry.sh"]
