@@ -35,7 +35,7 @@ var walk = function(dir, done) {
 mongoose.connect('mongodb://'+USER_MONGO_DB+':'+PASSWORD_MONGO_DB+'@ds161146.mlab.com:61146/parcialfinal');
 var db = mongoose.connection;
 
-walk("/home/SIS/jwsanabriad/Desktop/parcialFinal/parcial2", function(err, results) {
+walk("/home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/parcial2", function(err, results) {
     if (err) throw err;
     results.forEach(folder => {
         exec("cd " +  folder 
@@ -49,15 +49,15 @@ walk("/home/SIS/jwsanabriad/Desktop/parcialFinal/parcial2", function(err, result
         + " && " + "cd " +  folder+"/com.evancharlton.mileage_3110/dist"
         + " && " + "mv com.evancharlton.mileage_3110.apk ../../app.apk"
         + " && " + "rm -rf " +  folder+"/com.evancharlton.mileage_3110"
-        + " && " + "cd /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt"
-        + " && " + "sudo cp " + folder + "/app.apk /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt/app.apk"
-        + " && " + "sudo rm -rf /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt/features"
-        + " && " + "sudo rm -rf /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt/reports"
-        + " && " + "sudo cp /home/SIS/jwsanabriad/Desktop/parcialFinal/features /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt/features -r"
+        + " && " + "cd /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt"
+        + " && " + "sudo cp " + folder + "/app.apk /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/app.apk"
+        + " && " + "sudo rm -rf /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/features"
+        + " && " + "sudo rm -rf /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports"
+        + " && " + "sudo cp /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/features /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/features -r"
         + " && " + "sudo docker-compose build"
         + " && " + "sudo docker-compose run alpine"
-        + " && " + "sudo cp /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt/reports " + folder + "/reports -r"
-        + " && " + "sudo rm -rf /home/SIS/jwsanabriad/Desktop/parcialFinal/docker/docker-android-bdt/reports"
+        + " && " + "sudo cp /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports " + folder + "/reports -r"
+        + " && " + "sudo rm -rf /home/SIS/jwsanabriad/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports"
       );
         
         const execution = new Execution({name: folder, state: 'R'});
