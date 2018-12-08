@@ -7,7 +7,6 @@ const PASSWORD_MONGO_DB = process.env.MONGODB_PASSWORD;
 
 var walk = function(dir, done) {
   var results = [];
-  var folders = [];
   fs.readdir(dir, function(err, list) {
     if (err) return done(err);
     var i = 0;
@@ -31,14 +30,48 @@ var walk = function(dir, done) {
   });
 };
 
-// Connect to Mongoose and set connection variable
-mongoose.connect('mongodb://'+USER_MONGO_DB+':'+PASSWORD_MONGO_DB+'@ds161146.mlab.com:61146/parcialfinal');
-var db = mongoose.connection;
 
-walk("/home/ubuntu/Desktop/miso4208-parcialFinal/prueba", function(err, results) {
+let folders = [];
+
+// Connect to Mongoose and set connection variable
+//mongoose.connect('mongodb://'+USER_MONGO_DB+':'+PASSWORD_MONGO_DB+'@ds161146.mlab.com:61146/parcialfinal');
+//mongoose.connect('mongodb://localhost:27017/parcialfinal');
+//var db = mongoose.connection;
+
+walk("/home/miso4208/Desktop/parcialFinal/parcial2", function(err, results) {
     if (err) throw err;
-    results.forEach(folder => {
-        exec("cd " +  folder 
+    
+      
+        
+    executionCommand(()=>{
+      console.log("Termino todo el proceso");
+    });
+    
+  });
+
+
+
+
+  function executionCommand(doneCallBack){
+    if(folders.length <= 0) {
+      doneCallBack();
+      return;
+    }
+
+    let folder = folders.shift();
+    console.log("Inicia proceso con el folder: " + folder);
+    let execCallback = (error, stdout, stderr) => {
+      if (error) console.log("Hubo un error ejecutando el comando: " + error);
+      if (stdout) {
+        console.log("Termina la ejecución.");
+        const execution = new Execution({name: folder, state: 'R'});
+        execution.save().then(()=>console.log(folder));
+        executionCommand(doneCallBack)
+      }
+
+      
+    };
+    exec("cd " +  folder 
         + " && " + "apktool d com.evancharlton.mileage_3110.apk"
         + " && " + "cd " +  folder +"/com.evancharlton.mileage_3110" 
         + " && " + "sed '3i<uses-permission android:name=\"android.permission.INTERNET\"/>' AndroidManifest.xml > temporal.xml"
@@ -49,20 +82,16 @@ walk("/home/ubuntu/Desktop/miso4208-parcialFinal/prueba", function(err, results)
         + " && " + "cd " +  folder+"/com.evancharlton.mileage_3110/dist"
         + " && " + "mv com.evancharlton.mileage_3110.apk ../../app.apk"
         + " && " + "rm -rf " +  folder+"/com.evancharlton.mileage_3110"
-        + " && " + "cd /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt"
-        + " && " + "sudo cp " + folder + "/app.apk /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/app.apk"
-        + " && " + "sudo rm -rf /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/features"
-        + " && " + "sudo rm -rf /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports"
-        + " && " + "sudo mkdir /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports"
-        + " && " + "sudo cp /home/ubuntu/Desktop/miso4208-parcialFinal/features /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/features -r"
+        + " && " + "cd /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt"
+        + " && " + "sudo cp " + folder + "/app.apk /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/app.apk"
+        + " && " + "sudo rm -rf /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/features"
+        + " && " + "sudo rm -rf /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/reports"
+        + " && " + "sudo mkdir /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/reports"
+        + " && " + "sudo cp /home/miso4208/Desktop/parcialFinal/features /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/features -r"
         + " && " + "sudo docker-compose build"
         + " && " + "sudo docker-compose run alpine"
-        + " && " + "sudo cp /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports " + folder + "/reports -r"
-        + " && " + "sudo rm -rf /home/ubuntu/Desktop/miso4208-parcialFinal/docker/docker-android-bdt/reports"
-      );
-        
-        const execution = new Execution({name: folder, state: 'R'});
-        execution.save().then(()=>console.log(folder));
-    });
-    
-  });
+        + " && " + "sudo cp /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/reports " + folder + "/reports -r"
+        + " && " + "sudo rm -rf /home/miso4208/Desktop/parcialFinal/docker/docker-android-bdt/reports"
+      , execCallback);
+
+  }
